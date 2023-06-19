@@ -13,11 +13,15 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.urls import re_path
 from django.contrib import admin
-from .views import chat
+from django.views.generic.base import RedirectView
+from .views import chat, get_stats, TelegramBotView
 
 urlpatterns = [
-	url(r'^chat/$', chat, name='chat'),
-    url(r'^admin/', admin.site.urls)
+    re_path(r"^chat/$", chat, name="chat"),
+    re_path(r"^yo-mama-jokes/?$", TelegramBotView.as_view()),
+    re_path(r"stats", get_stats, name="stats"),
+    re_path(r"^admin/", admin.site.urls),
+    re_path("", RedirectView.as_view(url="/chat/", permanent=False)),
 ]

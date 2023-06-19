@@ -29,7 +29,7 @@ function add_message_to_chat(data, formatted_div){
 // Function taht is called when the server sends a message via websockets to my front end.
 function processAndDisplayChatMessage(message){
 
-	var content_data = JSON.parse(message.data);
+	var content_data = JSON.parse(message.data).text;
 	var formatted_div = generate_formatted_chat_message(
 		content_data);
 	
@@ -39,13 +39,14 @@ function processAndDisplayChatMessage(message){
 }
 
 
-function sendTextMessage() {
-    if ($('#messageToSend').text() == "") {
-        return
-    }
+function sendTextMessage(textToSend) {
+    // if ($('#messageToSend').text() == "") {
+    //     return
+    // }
 
     message = {}
-    message.text = $('#messageToSend').html().replace("</div>", "").replace("<div>", "\n").replace("<br>", "\n");
+    // message.text = $('#messageToSend').html().replace("</div>", "").replace("<div>", "\n").replace("<br>", "\n");
+	message.text = textToSend
     message.command= 'send'
     message.timestamp = new Date();
     

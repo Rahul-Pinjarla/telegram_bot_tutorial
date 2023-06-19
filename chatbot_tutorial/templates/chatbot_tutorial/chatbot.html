@@ -1,4 +1,4 @@
-{% load staticfiles %}
+{% load static %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -43,14 +43,17 @@
                     
                     <div class="row" id="send-box">
                         
-                        <div id="messageToSend" contenteditable="true" class="pull-left" data-ph="Type your message..."></div>
+                        <!-- <div id="messageToSend" contenteditable="true" class="pull-left" data-ph="Type your message..."></div> -->
+                        <button class="action-button" onclick="sendTextMessage('Fat')">Fat</button>
+                        <button class="action-button" onclick="sendTextMessage('Dumb')">Dumb</button>
+                        <button class="action-button" onclick="sendTextMessage('Stupid')">Stupid</button>
                         
 
-                        <div class="pull-right send-button-div">
+                        <!-- <div class="pull-right send-button-div">
                             <button  id="messageSendButton" type="button" onclick="sendTextMessage()">
                                 <i class="fa fa-paper-plane" aria-hidden="true"></i>
                             </button>  
-                        </div>
+                        </div> -->
 
                     </div>
                     
@@ -127,7 +130,7 @@
             var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
 
             // Calls the websocket connect channel
-            var chatsock = new ReconnectingWebSocket(ws_scheme + '://' + window.location.host + "/chat/stream/test-chat");
+            var chatsock = new ReconnectingWebSocket(ws_scheme + '://' + window.location.host + "/chat/stream/test_room/");
 
 
             $("#messageToSend").keypress(function (e) {
@@ -145,9 +148,10 @@
                 $('.error-notification').hide();
                 $('.non-error').show();
                 $('#messages-container').html('<div  class="empty-div"></div>');
-                message = {}
-                message.command= 'start'
-                chatsock.send(JSON.stringify(message)); // START TALKING!
+                // message = {}
+                // message.text='/start'
+                // message.command= 'send'
+                // chatsock.send(JSON.stringify(message)); // START TALKING!
             }
             chatsock.onmessage = function(message){
                 processAndDisplayChatMessage(message);

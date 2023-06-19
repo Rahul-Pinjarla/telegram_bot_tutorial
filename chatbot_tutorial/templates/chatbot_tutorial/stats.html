@@ -1,0 +1,91 @@
+{% load js %}
+
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+</head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+<body>
+
+<h2>All users and number of calls they have made:</h2>
+
+<table>
+  <tr>
+    <th>User ID</th>
+    <th>User Name</th>
+    <th>Fat joke calls</th>
+    <th>Dumb joke calls</th>
+    <th>Stupid joke calls</th>
+  </tr>
+  {% for req in requests %}
+  <tr>
+    <td>{{req.telegram_user__id}}</td>
+    <td>{{req.telegram_user__first_name}}</td>
+    <td>{{req.fat_joke_count}}</td>
+    <td>{{req.dumb_joke_count}}</td>
+    <td>{{req.stupid_joke_count}}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+<h3>Stats by joke type</h3>
+<canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+<script>
+    const joke_type_stats = {{ joke_type_stats | js }}
+    console.log(joke_type_stats)
+    var xValues = [];
+    var yValues = [];
+    joke_type_stats.forEach(elem => {
+        xValues.push(elem.joke_type)
+        yValues.push(elem.req_count)
+    });
+    console.log(xValues, yValues)
+    var barColors = ["red", "green","blue","orange","brown"];
+    
+    new Chart("myChart", {
+      type: "bar",
+      data: {
+        labels: xValues,
+        datasets: [{
+          backgroundColor: '#000',
+          data: yValues
+        }]
+      },
+      options: {
+        legend: {display: false},
+        title: {
+          display: true,
+          text: "Number of Call requests"
+        },
+        scales: {
+        yAxes: [{
+            ticks: {
+                beginAtZero: true,
+                stepSize: 1
+            },
+        }]
+    }
+      }
+    });
+    </script>
+
+</body>
+</html>
+
